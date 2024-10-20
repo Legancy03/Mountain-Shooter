@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from Code.Const import ENTITY_SPEED, WIN_WIDTH, ENTITY_SHOT_DELAY
+from Code.Const import ENTITY_SPEED, ENTITY_SHOT_DELAY
 from Code.EnemyShot import EnemyShot
 from Code.Entity import Entity
 
