@@ -31,11 +31,17 @@ class Level:
             player = EntityFactory.get_entity('Player2')
             player.score = player_score[1]
             self.entity_list.append(player)
+
+        if self.name == 'Level3':
+            self.timeout = TIMEOUT_LEVEL * 2
+        else:
+            self.timeout = TIMEOUT_LEVEL
         pygame.time.set_timer(EVENT_ENEMY, SPAWN_TIME)
         pygame.time.set_timer(EVENT_TIMEOUT, TIMEOUT_STEP)  # 100ms
 
     def run(self, player_score: list[int]):
         pygame.mixer_music.load(f'./Assets/{self.name}.mp3')
+        pygame.mixer_music.set_volume(0.1)
         pygame.mixer_music.play(-1)
         clock = pygame.time.Clock()
         while True:
@@ -56,7 +62,10 @@ class Level:
                     pygame.quit()
                     sys.exit()
                 if event.type == EVENT_ENEMY:
-                    choice = random.choice(('Enemy1', 'Enemy2'))
+                    if self.name == 'Level3':
+                        choice = 'Enemy3'
+                    else:
+                        choice = random.choice(('Enemy1', 'Enemy2'))
                     self.entity_list.append(EntityFactory.get_entity(choice))
                 if event.type == EVENT_TIMEOUT:
                     self.timeout -= TIMEOUT_STEP
@@ -78,7 +87,7 @@ class Level:
 
             # printed text
             self.level_text(18, f'{self.name} - Timeout: {self.timeout / 1000:.1f}s', C_WHITE, (10, 5))
-            self.level_text(18, f'fps: {clock.get_fps():.8f}', C_WHITE, (10, WIN_HEIGHT - 35))
+            self.level_text(18, f'fps: {clock.get_fps():.0f}', C_WHITE, (10, WIN_HEIGHT - 35))
             self.level_text(18, f'entidades: {len(self.entity_list)}', C_WHITE, (10, WIN_HEIGHT - 20))
             pygame.display.flip()
             # Collisions
