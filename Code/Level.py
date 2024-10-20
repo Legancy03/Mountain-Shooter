@@ -8,15 +8,17 @@ from pygame import Surface, Rect
 from pygame.font import Font
 
 from Code.Const import COLOR_WHITE, WIN_HEIGHT, MENU_OPTION, EVENT_ENEMY, SPAWN_TIME
+from Code.Enemy import Enemy
 from Code.Entity import Entity
 from Code.EntityFactory import EntityFactory
 from Code.EntityMediator import EntityMediator
+from Code.Player import Player
 
 
 class Level:
     def __init__(self, window, name, game_mode):
         self.window = window
-        self.timeout = 20000 # 20 seconds
+        self.timeout = 20000  # 20 seconds
         self.name = name
         self.game_mode = game_mode
         self.entity_list: list[Entity] = []
@@ -35,6 +37,10 @@ class Level:
             for ent in self.entity_list:
                 self.window.blit(source=ent.surf, dest=ent.rect)
                 ent.move()
+                if isinstance(ent, (Player, Enemy)):
+                    shot = ent.shot()
+                    if shot is not None:
+                        self.entity_list.append(shot)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
